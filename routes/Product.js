@@ -3,7 +3,7 @@ const multer = require('multer');
 const adminjwtauth = require('../services/jwtverify')
 const ProductModel = require('../model/product.model')
 let route = express.Router();
-const app = express();
+
 
 
 const storage = multer.diskStorage({
