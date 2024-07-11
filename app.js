@@ -8,9 +8,11 @@ const { createServer } = require('vercel-node-server');
 const app = express();
 app.use(express.json());
 const corsOptions = {
-    origin: '*', // Replace with your frontend URL
-    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: '*',
 };
+
 
 app.use(cors(corsOptions));
 
