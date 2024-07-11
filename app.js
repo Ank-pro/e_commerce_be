@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
 const corsOptions = {
-    origin: ['https://admin-app-flame.vercel.app', 'http://localhost:3000'],
+    origin: "*",
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
