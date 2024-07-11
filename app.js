@@ -4,7 +4,6 @@ const cors = require("cors");
 const path = require('path');
 const ProductModel = require('./model/product.model')
 const PORT = process.env.PORT || 5000;
-const { createServer } = require('vercel-node-server');
 const app = express();
 app.use(express.json());
 const corsOptions = {
@@ -40,11 +39,9 @@ app.use('/product', product)
 app.use("/admin", adminUser)
 
 
-// app.listen(PORT, () => {
+app.listen(PORT, () => {
 
-//     console.info(`SERVER RUNNING AT ${PORT} `);
+    console.info(`SERVER RUNNING AT ${PORT} `);
 
-// })
+})
 
-module.exports = app;
-module.exports.handler = createServer(app);
