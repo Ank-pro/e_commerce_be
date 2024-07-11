@@ -7,7 +7,7 @@
       { "src": "/(.*)", "dest": "/" }
     ],
     "functions": {
-        "*.js": {
+        "app.js": {
           "maxDuration": 60
         }
       }
