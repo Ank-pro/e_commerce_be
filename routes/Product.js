@@ -47,20 +47,31 @@ route.get('/', (req, res) => {
         .catch(err => res.json(err))
 });
 
-route.post('/add',adminjwtauth, upload.single('avatar'), async (req, res) => {
-    const body = JSON.parse(req.body.body)
-    const isExist = await ProductModel.findOne({ name: body?.name })
+route.post('/add', adminjwtauth, upload.single('avatar'), async (req, res) => {
+    try {
+        const body = JSON.parse(req.body.body);
+        const isExist = await ProductModel.findOne({ name: body?.name });
 
-    if (isExist) {
-        res.status(400).json({ error: "duplicate" })
-        return;
+        if (isExist) {
+            return res.status(400).json({ error: "Duplicate product name" });
+        }
+
+        let imageUrl = ''; // Initialize imageUrl variable
+
+        if (req.file) {
+            imageUrl = `http://${req.hostname}:5000/uploads/${req.file.filename}`;
+        }
+
+        const newProduct = new ProductModel({ ...body, imageUrl });
+
+        // Save the product to MongoDB
+        const savedProduct = await newProduct.save();
+        res.json(savedProduct);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
-
-    const newProduct = new ProductModel({ ...body, imageUrl: `http://${req.hostname}:${5000}/${req.file.destination}${req.file.originalname}` });
-    newProduct.save()
-        .then(product => res.json(product))
-        .catch(err => res.status(400).json({ error: err.message, msg: err }));
 });
+
 
 route.delete('/:id',adminjwtauth, (req, res) => {
     let idDel = req.params.id;
@@ -76,7 +87,6 @@ route.put('/product/:id', adminjwtauth, upload.single('avatar'), (req, res) => {
     const body = JSON.parse(req.body.body);
     let update = { ...body };
 
-    
     if (req.file) {
         update.imageUrl = `http://${req.hostname}:5000/uploads/${req.file.filename}`;
     }
@@ -90,5 +100,6 @@ route.put('/product/:id', adminjwtauth, upload.single('avatar'), (req, res) => {
         })
         .catch(err => res.status(400).json({ error: err.message }));
 });
+
 
 module.exports = route;
