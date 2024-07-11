@@ -7,7 +7,13 @@ const PORT = process.env.PORT || 5000;
 const { createServer } = require('vercel-node-server');
 const app = express();
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+    origin: '*', // Replace with your frontend URL
+    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+
 
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/AgroUdgam';
 
