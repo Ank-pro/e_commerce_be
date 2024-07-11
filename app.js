@@ -24,7 +24,8 @@ mongoose.connect(DB_URL, {
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads')));
+
 let product = require('./routes/Product');
 let adminUser = require('./routes/Admin')
 app.use('/product',product)
