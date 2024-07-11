@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 async function adminjwtauth(req, res, next) {
     try {
-        
+
         const BarrierHeader = req.headers['authorization']
 
         if (typeof BarrierHeader !== 'undefined') {
@@ -14,24 +14,24 @@ async function adminjwtauth(req, res, next) {
             console.log(BT)
 
             if (!BT) {
-                return res.status(401).json({msg: "NO AUTH TOKEN"});
+                return res.status(401).json({ msg: "NO AUTH TOKEN" });
             }
 
-            const verified = jwt.verify(BT,"SECRET_KEY");
+            const verified = jwt.verify(BT, "SECRET_KEY");
 
-            if (! verified) {
-                return res.status(401).json({msg: "ERROR AUTH"});
+            if (!verified) {
+                return res.status(401).json({ msg: "ERROR AUTH" });
             } else {
                 req.info = verified.id;
                 next();
             }
 
-        }else{
+        } else {
 
-            return res.status(401).json({msg: "ERROR AUTH"});
+            return res.status(401).json({ msg: "ERROR AUTH" });
         }
     } catch (e) {
-        return res.status(200).json({msg: false, err: e.message});
+        return res.status(200).json({ msg: false, err: e.message });
     }
 
 }

@@ -16,7 +16,7 @@ mongoose.connect(DB_URL, {
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
     socketTimeoutMS: 45000,         // Close sockets after 45 seconds of inactivity
-    connectTimeoutMS: 30000  
+    connectTimeoutMS: 30000
 }, (err) => {
     console.info(`DB is connected`);
 });
@@ -28,8 +28,8 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads
 
 let product = require('./routes/Product');
 let adminUser = require('./routes/Admin')
-app.use('/product',product)
-app.use("/admin",adminUser)
+app.use('/product', product)
+app.use("/admin", adminUser)
 
 
 app.listen(PORT, () => {
