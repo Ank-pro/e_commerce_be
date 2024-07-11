@@ -34,7 +34,7 @@ app.use("/admin", adminUser)
 
 app.listen(PORT, () => {
 
-    console.info(`SERVER RUNNING AT ${PORT}`);
+    console.info(`SERVER RUNNING AT ${PORT} `);
 
 })
 
