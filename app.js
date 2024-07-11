@@ -40,9 +40,11 @@ app.use('/product', product)
 app.use("/admin", adminUser)
 
 
-app.listen(PORT, () => {
+// app.listen(PORT, () => {
 
-    console.info(`SERVER RUNNING AT ${PORT} `);
+//     console.info(`SERVER RUNNING AT ${PORT} `);
 
-})
+// })
 
+module.exports = app;
+module.exports.handler = createServer(app);
