@@ -15,6 +15,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use((req, res, next) => {
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+});
+
 
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/AgroUdgam';
 
