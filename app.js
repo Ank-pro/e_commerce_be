@@ -12,7 +12,11 @@ app.use(cors());
 const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/AgroUdgam';
 
 mongoose.connect(DB_URL, {
-    useUnifiedTopology: "true", 
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+    socketTimeoutMS: 45000,         // Close sockets after 45 seconds of inactivity
+    connectTimeoutMS: 30000  
 }, (err) => {
     console.info(`DB is connected`);
 });
