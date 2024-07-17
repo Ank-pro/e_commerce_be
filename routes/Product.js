@@ -49,14 +49,20 @@ route.get('/', (req, res) => {
 
 route.post('/add', adminjwtauth, upload.single('avatar'), async (req, res) => {
     try {
-        const body = JSON.parse(req.body.body);
+        let body;
+        if (req.file) {
+            body = JSON.parse(req.body.body);
+        } else {
+            body = req.body;
+        }
+
         const isExist = await ProductModel.findOne({ name: body?.name });
 
         if (isExist) {
             return res.status(400).json({ error: "Duplicate product name" });
         }
 
-        let imageUrl = ''; // Initialize imageUrl variable
+        let imageUrl = body.imageUrl || ''; 
 
         if (req.file) {
             imageUrl = `http://${req.hostname}:5000/uploads/${req.file.filename}`;
@@ -64,7 +70,6 @@ route.post('/add', adminjwtauth, upload.single('avatar'), async (req, res) => {
 
         const newProduct = new ProductModel({ ...body, imageUrl });
 
-        // Save the product to MongoDB
         const savedProduct = await newProduct.save();
         res.json(savedProduct);
     } catch (err) {
@@ -82,23 +87,32 @@ route.delete('/:id',adminjwtauth, (req, res) => {
 
 
 
-route.put('/product/:id', adminjwtauth, upload.single('avatar'), (req, res) => {
-    const productId = req.params.id;
-    const body = JSON.parse(req.body.body);
-    let update = { ...body };
+route.put('/product/:id', adminjwtauth, upload.single('avatar'), async (req, res) => {
+    try {
+        const productId = req.params.id;
+        let body;
+        if (req.file) {
+            body = JSON.parse(req.body.body);
+        } else {
+            body = req.body;
+        }
+        
+        let update = { ...body };
 
-    if (req.file) {
-        update.imageUrl = `http://${req.hostname}:5000/uploads/${req.file.filename}`;
+        if (req.file) {
+            update.imageUrl = `http://${req.hostname}:5000/uploads/${req.file.filename}`;
+        }
+
+        const updatedProduct = await ProductModel.findByIdAndUpdate(productId, update, { new: true });
+        
+        if (!updatedProduct) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        
+        return res.json(updatedProduct);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
-
-    ProductModel.findByIdAndUpdate(productId, update, { new: true })
-        .then(updatedProduct => {
-            if (!updatedProduct) {
-                return res.status(404).json({ error: 'Product not found' });
-            }
-            return res.json(updatedProduct);
-        })
-        .catch(err => res.status(400).json({ error: err.message }));
 });
 
 
